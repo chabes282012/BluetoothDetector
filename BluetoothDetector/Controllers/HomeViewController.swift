@@ -26,8 +26,8 @@ class HomeViewController: UIViewController {
         view.addSubview(homeView)
         centralManager.delegate = self
         print(nearbyBluetoothDevices.count)
-      //  homeView.bluetoothTableView.dataSource = self
-       // homeView.bluetoothTableView.delegate = self
+       homeView.bluetoothTableView.dataSource = self
+       homeView.bluetoothTableView.delegate = self
     }
 }
 
@@ -48,6 +48,24 @@ extension HomeViewController: CBCentralManagerDelegate {
     }
 }
 
+extension HomeViewController: UITableViewDataSource, UITableViewDelegate{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return nearbyBluetoothDevices.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let bluetoothDevice = nearbyBluetoothDevices[indexPath.row]
+        guard let bluetoothCell = tableView.dequeueReusableCell(withIdentifier: "BluetoothTableViewCell", for: indexPath) as? BluetoothTableViewCell else {return UITableViewCell()}
+        bluetoothCell.setBlueToothDeviceInfo(onBlueToothCell: bluetoothCell, withDevice: bluetoothDevice)
+        bluetoothCell.selectionStyle = .none
+        return bluetoothCell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 150
+    }
+    
+}
 
 
 
